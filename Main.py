@@ -84,12 +84,16 @@ df = pd.read_csv("cfb.csv")
 for season in df["Season"]:
     if season not in seasons:
         seasons.append(season)
-    
+
+print("Enter q at any time to quit")
 #ask the user for input
-while True:
-    #try:
-        user_season = int(input("Which season would you like data for?"))
-        if user_season in seasons:
+find_data = True
+while find_data:
+    try:
+        user_season = input("Which season would you like data for? ")
+        if user_season.lower().strip() == 'q':
+            break
+        elif user_season in seasons:
             idx_start = df[df["Season"] == user_season].index[0]
             if user_season + 1 in seasons:
                 user_season += 1
@@ -111,10 +115,16 @@ while True:
             print("We don't have data for that season.")
         else:
             print("Invalid input, please try again")
-    #except ValueError:
-        #print("Please enter the season an an iteger (ex. 2018)")
-    #except:
-        #print("Something went wrong, please try again")
+        category_dict = {
+            "10+":[],
+            "8-9":[],
+            "6-7":[],
+            "6-":[]
+        }
+    except ValueError:
+        print("Please enter the season an an iteger (ex. 2018)")
+    except:
+        print("Something went wrong, please try again")
 
 #analyze the data based on user input, use a DICTIONARY to organize into the categories {"10+":["BYU"]}
 #display accordingly (10 or more wins, 8-9 wins, 6-7 wins, less than 6 wins)
