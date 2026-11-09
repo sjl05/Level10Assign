@@ -60,6 +60,8 @@ category_dict = {
 }
 seasons = []
 #functions
+def win_nums(team):
+
 def output_season_win_data(swd):
     print("10+ wins:")
     for team in swd["10+"]:
@@ -87,31 +89,19 @@ for season in df["Season"]:
 
 print("Enter q at any time to quit")
 #ask the user for input
-find_data = True
-while find_data:
-    try:
-        user_season = input("Which season would you like data for? ")
-        if user_season.lower().strip() == 'q':
+while True:
+    #try:
+        user_season = input("Which season would you like data for? ").strip()
+        if user_season.lower() == 'q':
             break
-        elif user_season in seasons:
-            idx_start = df[df["Season"] == user_season].index[0]
-            if user_season + 1 in seasons:
-                user_season += 1
-                idx_end = df[df["Season"] == user_season].index[0] + 1
-            else:
-                idx_end = -1
-            for i in range(idx_start, idx_end):
-                num_wins = df.iloc[i,3]
-                if num_wins >= 10:
-                    category_dict["10+"].append(df.iloc[i,1])
-                elif num_wins == 9 or num_wins == 8:
-                    category_dict["8-9"].append(df.iloc[i,1])
-                elif num_wins == 7 or num_wins == 6:
-                    category_dict["6-7"].append(df.iloc[i,1])
-                elif num_wins < 6:
-                    category_dict["6-"].append(df.iloc[i,1])
+        elif int(user_season) in seasons:
+            data_for_year = df.loc[df["Season"] == user_season]
+            category_dict["10+"].append(data_for_year.querey("Wins >= 10")["Team"])
+            category_dict["8-9"].append(df.iloc[i,1])
+            category_dict["6-7"].append(df.iloc[i,1])
+            category_dict["6-"].append(df.iloc[i,1])
             output_season_win_data(category_dict)
-        elif user_season not in seasons:
+        elif int(user_season) not in seasons:
             print("We don't have data for that season.")
         else:
             print("Invalid input, please try again")
@@ -121,10 +111,10 @@ while find_data:
             "6-7":[],
             "6-":[]
         }
-    except ValueError:
-        print("Please enter the season an an iteger (ex. 2018)")
-    except:
-        print("Something went wrong, please try again")
+    #except ValueError:
+        #print("Please enter the season an an iteger (ex. 2018)\n Otherwise enter 'q' to quit.")
+    #except:
+        #print("Something went wrong, please try again")
 
 #analyze the data based on user input, use a DICTIONARY to organize into the categories {"10+":["BYU"]}
 #display accordingly (10 or more wins, 8-9 wins, 6-7 wins, less than 6 wins)
