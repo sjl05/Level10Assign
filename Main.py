@@ -66,7 +66,7 @@ while True:
             "6-":[]
         }
     except ValueError:
-        print("Please enter the season as an iteger (ex. 2018) or enter 'q' to quit.")
+        print("Please enter the season as an integer (ex. 2018) or enter 'q' to quit.")
     except:
         print("Something went wrong, please try again.")
 print("Thank you for using our football analysis tool. Goodbye!")
