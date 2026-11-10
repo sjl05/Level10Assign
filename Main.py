@@ -60,9 +60,8 @@ category_dict = {
 }
 seasons = []
 #functions
-def win_nums(team):
-
 def output_season_win_data(swd):
+    """Takes the dictionary for categories, prints all appropriate data"""
     print("10+ wins:")
     for team in swd["10+"]:
         print(team)
@@ -86,21 +85,24 @@ df = pd.read_csv("cfb.csv")
 for season in df["Season"]:
     if season not in seasons:
         seasons.append(season)
-
+#Welcome the user
+print("Welcome to the Football Analysis tool!")
 print("Enter q at any time to quit")
 #ask the user for input
 while True:
-    #try:
+    try:
         user_season = input("Which season would you like data for? ").strip()
         if user_season.lower() == 'q':
             break
-        elif int(user_season) in seasons:
+        elif int(user_season) in seasons: #only the requested seasons can be accessed (don't hardcode)
+            user_season = int(user_season)
+            #analyze the data based on user input
             data_for_year = df.loc[df["Season"] == user_season]
-            category_dict["10+"].append(data_for_year.querey("Wins >= 10")["Team"])
-            category_dict["8-9"].append(df.iloc[i,1])
-            category_dict["6-7"].append(df.iloc[i,1])
-            category_dict["6-"].append(df.iloc[i,1])
-            output_season_win_data(category_dict)
+            category_dict["10+"].extend(data_for_year.query("Win >= 10")["Team"].tolist())
+            category_dict["8-9"].extend(data_for_year.query("Win <= 9 and Win >= 8")["Team"].tolist())
+            category_dict["6-7"].extend(data_for_year.query("Win <= 7 and Win >= 6")["Team"].tolist())
+            category_dict["6-"].extend(data_for_year.query("Win < 6")["Team"].tolist())
+            output_season_win_data(category_dict) #display accordingly (10 or more wins, 8-9 wins, 6-7 wins, less than 6 wins)
         elif int(user_season) not in seasons:
             print("We don't have data for that season.")
         else:
@@ -111,11 +113,8 @@ while True:
             "6-7":[],
             "6-":[]
         }
-    #except ValueError:
-        #print("Please enter the season an an iteger (ex. 2018)\n Otherwise enter 'q' to quit.")
-    #except:
-        #print("Something went wrong, please try again")
-
-#analyze the data based on user input, use a DICTIONARY to organize into the categories {"10+":["BYU"]}
-#display accordingly (10 or more wins, 8-9 wins, 6-7 wins, less than 6 wins)
-#only the requested seasons can be accessed (don't hardcode)
+    except ValueError:
+        print("Please enter the season an an iteger (ex. 2018)\n Otherwise enter 'q' to quit.")
+    except:
+        print("Something went wrong, please try again")
+print("Thank you for using our football analysis tool. Goodbye!")
